@@ -1,3 +1,8 @@
+/**
+ * 爬蟲組合包
+ *
+ * @author Abola Lee <abola921@gmail.com>
+ */
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.VFS;
 import org.json.JSONArray;
@@ -75,7 +80,7 @@ public class CrawlerPack {
      * 透過 Apache Common VFS 套件 取回遠端的資源
      *
      * 能使用的協定參考：
-     * @see https://commons.apache.org/proper/commons-vfs/filesystems.html
+     * @see "https://commons.apache.org/proper/commons-vfs/filesystems.html"
      */
     public static String getFromRemote(String url){
         try {

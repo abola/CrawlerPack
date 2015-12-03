@@ -3,7 +3,15 @@ package org.jsoup.parser;
  * 利用增加prefix的方式，騙過 Token.Read
  * 再於寫入StartTag及EndTag前，將TagName還原
  *
- * Created by abolalee
+ * <p>Usage example: {@code Document xmlDoc = Jsoup.parse(html, baseUrl, new Parser( new MyXmlTreeBuilder("prefixName")  );}</p>
+ *
+ * @author Abola Lee<abola921@gmail.com>
+ ****
+ * Use the {@code XmlTreeBuilder} when you want to parse XML without any of the HTML DOM rules being applied to the
+ * document.
+ * <p>Usage example: {@code Document xmlDoc = Jsoup.parse(html, baseUrl, Parser.xmlParser());}</p>
+ *
+ * @author Jonathan Hedley
  */
 
 import org.jsoup.helper.Validate;
