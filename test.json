@@ -4,6 +4,6 @@
     {"name":"蘋果","unit":"顆","price":10,"amount":6500}
     , {"name":"機車","unit":"輛","price":81000,"amount":5}
     , {"name":"西瓜","unit":"顆","price":150,"amount":200}
-  ]
+ ],
 "備註":"中文欄位測試"
 }
