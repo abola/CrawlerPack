@@ -2,5 +2,7 @@
 
 簡易使用程式碼
 
-    String api = "";
+    String api = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
     Document jsoup = CrawlerPack.getFromJson(api);
+    System.out.print( jsoup.select("results name").get(0).text() );
+    
