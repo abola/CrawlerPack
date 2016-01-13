@@ -3,6 +3,8 @@
  *
  * @author Abola Lee <abola921@gmail.com>
  */
+package com.github.abola.crawler;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.VFS;
 import org.json.JSONArray;
