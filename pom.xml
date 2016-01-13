@@ -9,13 +9,6 @@
     <version>0.9.1</version>
 
     <dependencies>
-        <!-- Google Guava lib https://github.com/google/guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-        </dependency>
-
         <!-- Apache Commons VFS http://commons.apache.org/proper/commons-vfs/ -->
         <dependency>
             <groupId>org.apache.commons</groupId>
