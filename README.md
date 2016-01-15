@@ -11,3 +11,5 @@
     // 使用 CSS selector 來取用資料
     System.out.print( jsoup.select("results name").get(0).text() );
     
+* 在 http/https 中使用 cookie 
+
