@@ -8,6 +8,9 @@
     <artifactId>crawler</artifactId>
     <version>0.9.1</version>
 
+    <!-- Output to jar format -->
+    <packaging>jar</packaging>
+
     <dependencies>
         <!-- Apache Commons VFS http://commons.apache.org/proper/commons-vfs/ -->
         <dependency>
@@ -50,7 +53,7 @@
                 <version>2.6</version>
                 <configuration>
                     <includes>
-                        <include>**/java/com/github/abola/*</include>
+                        <include>**/*.class</include>
                     </includes>
                 </configuration>
             </plugin>
