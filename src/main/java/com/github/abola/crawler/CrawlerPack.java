@@ -3,6 +3,8 @@
  *
  * @author Abola Lee <abola921@gmail.com>
  */
+package com.github.abola.crawler;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.VFS;
 import org.json.JSONArray;
@@ -10,13 +12,16 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.parser.MyXmlTreeBuilder;
 import org.jsoup.parser.Parser;
+import org.jsoup.parser.PrefixXmlTreeBuilder;
 
 import java.nio.charset.StandardCharsets;
 
 public class CrawlerPack {
 
+    static{
+        XTrustProvider.install();
+    }
     /**
      * 取得遠端格式為 JSON 的資料
      *
@@ -114,7 +119,7 @@ public class CrawlerPack {
                  .replaceAll("<\\/([^A-Za-z\\/][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
 
         // 將 xml(html/html5) 轉為 jsoup Document 物件
-        Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new MyXmlTreeBuilder(prefix.toLowerCase()) ) );
+        Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new PrefixXmlTreeBuilder(prefix.toLowerCase()) ) );
         jsoupDoc.charset(StandardCharsets.UTF_8);
 
 

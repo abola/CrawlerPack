@@ -3,7 +3,7 @@ package org.jsoup.parser;
  * 利用增加prefix的方式，騙過 Token.Read
  * 再於寫入StartTag及EndTag前，將TagName還原
  *
- * <p>Usage example: {@code Document xmlDoc = Jsoup.parse(html, baseUrl, new Parser( new MyXmlTreeBuilder("prefixName")  );}</p>
+ * <p>Usage example: {@code Document xmlDoc = Jsoup.parse(html, baseUrl, new Parser( new PrefixXmlTreeBuilder("prefixName")  );}</p>
  *
  * @author Abola Lee<abola921@gmail.com>
  ****
@@ -24,9 +24,9 @@ import org.jsoup.parser.Token.StartTag;
 
 import java.util.List;
 
-public class MyXmlTreeBuilder extends XmlTreeBuilder {
+public class PrefixXmlTreeBuilder extends XmlTreeBuilder {
     String prefix;
-    public MyXmlTreeBuilder(String prefix) {
+    public PrefixXmlTreeBuilder(String prefix) {
         this.prefix = prefix;
     }
 
