@@ -1,7 +1,17 @@
 /**
- * 爬蟲組合包
+ * Copyright 2015-2016 Abola Lee
  *
- * @author Abola Lee <abola921@gmail.com>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.github.abola.crawler;
 
@@ -17,16 +27,24 @@ import org.jsoup.parser.PrefixXmlTreeBuilder;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 資料爬蟲包 
+ *  
+ * 
+ * @author Abola Lee <abola921@gmail.com>
+ * @since 0.9
+ */
 public class CrawlerPack {
 
+    // create a Self-signed Server Certificates 
     static{
         XTrustProvider.install();
     }
     /**
      * 取得遠端格式為 JSON 的資料
      *
-     * @param url required Apache Common VFS supported file systems
-     * @return Jsoup Document
+     * @param url required Apache Common VFS supported file systems and response JSON format content. 
+     * @return org.jsoup.nodes.Document 
      */
     public static org.jsoup.nodes.Document getFromJson(String url){
         // 取回資料，並轉化為XML格式
@@ -44,8 +62,8 @@ public class CrawlerPack {
     /**
      * 取得遠端格式為 XML 的資料
      *
-     * @param url required Apache Common VFS supported file systems
-     * @return Jsoup Document
+     * @param url required Apache Common VFS supported file systems and response XML format content. 
+     * @return org.jsoup.nodes.Document 
      */
     public static org.jsoup.nodes.Document getFromXml(String url){
         // 取回資料，並轉化為XML格式
@@ -59,6 +77,9 @@ public class CrawlerPack {
 
     /**
      * HTML 與 XML 處理模式相同
+     * 
+     * @param url required Apache Common VFS supported file systems and response XML format content.
+     * @return org.jsoup.nodes.Document 
      */
     public static org.jsoup.nodes.Document getFromHtml(String url){
         return getFromXml(url);
@@ -66,7 +87,8 @@ public class CrawlerPack {
 
     /**
      * 將 json 轉為 XML
-     * @param json
+     * 
+     * @param a json format string.
      * @return
      */
     public static String jsonToXml(String json){
@@ -85,7 +107,7 @@ public class CrawlerPack {
      * 透過 Apache Common VFS 套件 取回遠端的資源
      *
      * 能使用的協定參考：
-     * @see "https://commons.apache.org/proper/commons-vfs/filesystems.html"
+     * @see <a href="https://commons.apache.org/proper/commons-vfs/filesystems.html">commons-vfs filesystems</a>
      */
     public static String getFromRemote(String url){
         try {
@@ -111,6 +133,8 @@ public class CrawlerPack {
      * 所以必需用騙的先置入 prefix
      * 再改寫xmlParse 在回傳時移除prefix
      *
+     * @param XML
+     * @return org.jsoup.nodes.Document
      */
     public static org.jsoup.nodes.Document xmlToJsoupDoc(String xml){
 
