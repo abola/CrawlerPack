@@ -6,7 +6,7 @@
     <dependency>
         <groupId>com.github.abola</groupId>
         <artifactId>crawler</artifactId>
-        <version>0.9.1</version>
+        <version>0.9.2</version>
     </dependency>
 
 ### 簡易使用程式碼
@@ -22,6 +22,9 @@
 
 
 ### Change log
+#### 0.9.2
+* 修正解析註解以及 js 中特殊符號的錯誤
+* 修正動態網頁資料被cache的問題
 #### 0.9.1
 * 增加授權，使用Apache 2.0 公開授權
 * 專案已上傳至公開的 Maven Repository 現在可以直接透過pom.xml使用爬蟲包
