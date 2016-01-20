@@ -15,7 +15,7 @@
     // 指定資料格式，使用CSS selector 來擷取資料
     CrawlerPack
         .getFromJson(api)
-        .select("results name").toString() ;
+        .select("results name").text() ;
 
 ### 調整中項目 
 * 在 http/https 中支援 cookie 
