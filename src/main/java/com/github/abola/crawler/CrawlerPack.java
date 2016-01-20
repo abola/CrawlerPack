@@ -16,7 +16,8 @@
 package com.github.abola.crawler;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.vfs2.VFS;
+import org.apache.commons.vfs2.*;
+import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -32,13 +33,23 @@ import java.nio.charset.StandardCharsets;
  *  
  * 
  * @author Abola Lee <abola921@gmail.com>
- * @since 0.9
+ * @since 0.9.1_1
  */
 public class CrawlerPack {
 
-    // create a Self-signed Server Certificates 
+    static StandardFileSystemManager fileSystem ;
+
     static{
+        // create a Self-signed Server Certificates
         XTrustProvider.install();
+
+        try {
+            fileSystem = new StandardFileSystemManager();
+            fileSystem.setCacheStrategy(CacheStrategy.ON_CALL);
+            fileSystem.init();
+        }catch(FileSystemException fse){
+            // ignore
+        }
     }
     /**
      * 取得遠端格式為 JSON 的資料
@@ -53,8 +64,6 @@ public class CrawlerPack {
         // 將 json 轉化為 xml
         String xml  = jsonToXml(json);
 
-        // Custom code here
-
         // 轉化為 Jsoup 物件
         return xmlToJsoupDoc(xml);
     }
@@ -68,8 +77,6 @@ public class CrawlerPack {
     public static org.jsoup.nodes.Document getFromXml(String url){
         // 取回資料，並轉化為XML格式
         String xml = getFromRemote(url);
-
-        // Custom code here
 
         // 轉化為 Jsoup 物件
         return xmlToJsoupDoc(xml);
@@ -110,10 +117,13 @@ public class CrawlerPack {
      * @see <a href="https://commons.apache.org/proper/commons-vfs/filesystems.html">commons-vfs filesystems</a>
      */
     public static String getFromRemote(String url){
+
+        // clear cache
+        fileSystem.getFilesCache().close();
         try {
             // 透過  Apache VFS 取回指定的遠端資料
             return IOUtils.toString(
-                    VFS.getManager().resolveFile(url).getContent().getInputStream()
+                    fileSystem.resolveFile(url).getContent().getInputStream()
                     , "UTF-8"
             );
         }catch(Exception ex){
@@ -133,19 +143,18 @@ public class CrawlerPack {
      * 所以必需用騙的先置入 prefix
      * 再改寫xmlParse 在回傳時移除prefix
      *
-     * @param XML
+     * @param XML String
      * @return org.jsoup.nodes.Document
      */
     public static org.jsoup.nodes.Document xmlToJsoupDoc(String xml){
 
         // Tag 首字元非 a-zA-Z 時轉化為註解的問題
-        xml = xml.replaceAll("<([^A-Za-z\\/][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
-                 .replaceAll("<\\/([^A-Za-z\\/][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
+        xml = xml.replaceAll("<([^A-Za-z\\/! ][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
+                 .replaceAll("<\\/([^A-Za-z\\/ ][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
 
         // 將 xml(html/html5) 轉為 jsoup Document 物件
         Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new PrefixXmlTreeBuilder(prefix.toLowerCase()) ) );
         jsoupDoc.charset(StandardCharsets.UTF_8);
-
 
         return jsoupDoc;
     }

@@ -40,7 +40,7 @@ public class PrefixXmlTreeBuilder extends XmlTreeBuilder {
                 popStackToClose(token.asEndTag());
                 break;
             case Comment:
-                insert(token.asComment().asStartTag());
+                insert(token.asComment());
                 break;
             case Character:
                 insert(token.asCharacter());
