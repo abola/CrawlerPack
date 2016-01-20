@@ -1,6 +1,8 @@
-# 資料爬蟲包
+# Java 網路資料爬蟲包
+本套件為網路上常見的資料協定、格式，提供了簡易且方便的操作接口。套件主要以Jsoup為核心擴展，整合Apache Commons-VFS後，提供更多種協定的操作，也可支援壓縮格式處理。
 
-公開於 JCConf 2015 TW 高效率資料爬蟲組合包 投影片 http://www.slideshare.net/ssuser438746/jcconf-2015-tw
+
+* 公開於 JCConf 2015 TW 高效率資料爬蟲組合包 投影片 http://www.slideshare.net/ssuser438746/jcconf-2015-tw
 
 ### Maven import
     <dependency>
@@ -10,12 +12,41 @@
     </dependency>
 
 ### 簡易使用程式碼
-    // 指定 URI format 來源
+    // URI format source
     String api = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
-    // 指定資料格式，使用CSS selector 來擷取資料
+    
+    // Set remote content format, and using CSS Selector fetch data.
     CrawlerPack
         .getFromJson(api)
         .select("results name").text() ;
+
+### 支援協定
+使用 Apache Commons-VFS 所支援所有協定，常見網路協定如http/https,samba(cifs),ftp,sftp等…詳細列表請參考 https://commons.apache.org/proper/commons-vfs/filesystems.html
+
+### 支援資料格式
+* JSON
+* XML
+* HTML 
+
+
+#### Get JSON format example
+
+
+#### Get XML format example
+    
+    // 10萬月薪以上的工作資料
+    String url = "http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&fmt=4&cols=JOB,NAME&slmin=100000&sltp=S&pgsz=20";
+    
+    CrawlerPack
+        .getFromXml(url)
+        .select("item").get(0).attr("job") ;
+
+#### Get Html format example
+
+
+#### Get compressed data example
+
+
 
 ### 調整中項目 
 * 在 http/https 中支援 cookie 
