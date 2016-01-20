@@ -12,10 +12,10 @@
 ### 簡易使用程式碼
     // 指定 URI format 來源
     String api = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
-    // 依資料格式，轉化為 Jsoup 物件
-    Document jsoup = CrawlerPack.getFromJson(api);
-    // 使用 CSS selector 來取用資料
-    jsoup.select("results name").get(0).text() ;
+    // 指定資料格式，使用CSS selector 來擷取資料
+    CrawlerPack
+        .getFromJson(api)
+        .select("results name").toString() ;
 
 ### 調整中項目 
 * 在 http/https 中支援 cookie 
