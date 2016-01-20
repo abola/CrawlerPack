@@ -21,3 +21,9 @@
 * 在 http/https 中支援 cookie 
 
 
+### Change log
+#### 0.9.1
+* 增加授權，使用Apache 2.0 公開授權
+* 專案已上傳至公開的 Maven Repository 現在可以直接透過pom.xml使用爬蟲包
+* 修正 https PKIX 驗證無法通過的問題
+
