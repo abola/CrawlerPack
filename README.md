@@ -29,10 +29,16 @@
 * HTML 
 
 
-#### Get JSON format example
+#### JSON format example
 
+    // 即時PM2.5資料
+    String url = "http://opendata2.epa.gov.tw/AQX.json";
 
-#### Get XML format example
+    CrawlerPack
+        .getFromJson(url)
+        .getElementsByTag("pm2.5").text();
+
+#### XML format example
     
     // 10萬月薪以上的工作資料
     String url = "http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&fmt=4&cols=JOB,NAME&slmin=100000&sltp=S&pgsz=20";
@@ -41,13 +47,27 @@
         .getFromXml(url)
         .select("item").get(0).attr("job") ;
 
-#### Get Html format example
+#### Html format example
 
+    // ptt 笨版最新文章列表
+    String url = "https://www.ptt.cc/bbs/StupidClown/index.html";
 
-#### Get compressed data example
+    CrawlerPack
+        .getFromHtml(url)
+        .select("div.title > a").text();
+        
+#### Compressed data example
 
-
-
+    // 北市Youbike資訊
+    String url = "gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz";
+    
+    // 目前編號0004站借用資訊
+    CrawlerPack
+        .getFromJson(url)
+        .select("0004")
+        .select("sarea, ar, tot, sbi").text();
+        
+        
 ### 調整中項目 
 * 在 http/https 中支援 cookie 
 
