@@ -1,33 +1,55 @@
 # Java 網路資料爬蟲包
-本套件為網路上常見的資料協定、格式，提供了簡易且方便的操作接口。套件主要以Jsoup為核心擴展，整合Apache Commons-VFS後，提供更多種協定的操作，也可支援壓縮格式處理。
+本套件為網路上常見的資料協定、格式，提供了簡易且方便(easy-to-use)的操作接口。套件主要以Jsoup為核心擴展，整合Apache Commons-VFS後，提供更多種協定的操作，也可支援壓縮格式處理。
 
+Requires JDK 1.6 or higher
 
-* 公開於 JCConf 2015 TW 高效率資料爬蟲組合包 投影片 http://www.slideshare.net/ssuser438746/jcconf-2015-tw
+To add a dependency on CrawlerPack using Maven, use the following:
 
-### Maven import
     <dependency>
         <groupId>com.github.abola</groupId>
         <artifactId>crawler</artifactId>
         <version>0.9.2</version>
     </dependency>
 
-### 簡易使用程式碼
+
+Easy-to-use example
+
     // URI format source
-    String api = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
+    String uri = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
     
-    // Set remote content format, and using CSS Selector fetch data.
     CrawlerPack
-        .getFromJson(api)
+        .getFromJson(uri)
         .select("results name").text() ;
 
-### 支援協定
+## 爬蟲包特色
+### 支援常見網路協定
 使用 Apache Commons-VFS 所支援所有協定，常見網路協定如http/https,samba(cifs),ftp,sftp等…詳細列表請參考 https://commons.apache.org/proper/commons-vfs/filesystems.html
 
-### 支援資料格式
+### 支援常見資料格式
 * JSON
 * XML
 * HTML 
 
+### 支援 中文XML標籤 / 中文JSON欄位
+爬蟲包套件可正常的處理使用中文命名的XML或JSON
+
+ XML
+
+    <集合>
+      <元素>元素名稱1</元素>
+      <元素>元素名稱2</元素>
+    </集合>
+
+
+ JSON
+
+    {"集合":[
+        {"元素":"元素名稱1"}
+        , {"元素":"元素名稱2"}
+    ]}
+
+
+## 使用範例
 
 #### JSON format example
 
@@ -68,11 +90,11 @@
         .select("sarea, ar, tot, sbi").text();
         
         
-### 調整中項目 
+## 發展中項目 
 * 在 http/https 中支援 cookie 
 
 
-### Change log
+## Change log
 #### 0.9.2
 * 修正解析註解以及 js 中特殊符號的錯誤
 * 修正動態網頁資料被cache的問題
@@ -82,3 +104,5 @@
 * 專案已上傳至公開的 Maven Repository 現在可以直接透過pom.xml使用爬蟲包
 * 修正 https PKIX 驗證無法通過的問題
 
+## Reference
+* JCConf 2015 TW 高效率資料爬蟲組合包 投影片 http://www.slideshare.net/ssuser438746/jcconf-2015-tw
