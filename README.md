@@ -13,8 +13,14 @@ To add a dependency on CrawlerPack using Maven, use the following:
         <version>0.9.2</version>
     </dependency>
 
+To add a dependency using Gradle:
 
-Easy-to-use example
+    dependencies {
+        compile 'com.github.abola:crawler:0.9.2'
+    }
+
+
+And easy-to-use example
 
     // URI format source
     String uri = "https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json";
