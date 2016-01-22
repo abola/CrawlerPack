@@ -19,7 +19,7 @@ public class Ch5Coz3 {
             "&key="+token;
 
     public static void main(String[] args){
-        Document original = CrawlerPack.getFromXml(url);
+        Document original = CrawlerPack.start().getFromXml(url);
 
         // 檢視 xml 內容
         //System.out.println(original.toString());
