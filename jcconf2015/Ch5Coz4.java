@@ -18,7 +18,7 @@ public class Ch5Coz4 {
 
     public static void main(String[] args){
         // API 內容轉化為 jsoup Document 物件
-        Document original = CrawlerPack.getFromJson(url);
+        Document original = CrawlerPack.start().getFromJson(url);
 
         // 檢視 xml 內容
         //System.out.println( original.toString() );
