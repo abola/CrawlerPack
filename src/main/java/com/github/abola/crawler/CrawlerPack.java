@@ -15,9 +15,11 @@
  */
 package com.github.abola.crawler;
 
+import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.*;
 import org.apache.commons.vfs2.impl.StandardFileSystemManager;
+import org.apache.commons.vfs2.provider.http.HttpFileSystemConfigBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -25,17 +27,22 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.parser.PrefixXmlTreeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * 資料爬蟲包 
  *  
  * 
  * @author Abola Lee <abola921@gmail.com>
- * @since 0.9.1_1
  */
 public class CrawlerPack {
+
+    static Logger log = LoggerFactory.getLogger(CrawlerPack.class);
 
     static StandardFileSystemManager fileSystem ;
 
@@ -51,15 +58,110 @@ public class CrawlerPack {
             // ignore
         }
     }
+
+    static CrawlerPack defaultCrawler ;
+
+    /**
+     *
+     *
+     *
+     * @return
+     */
+    public static CrawlerPack start(){
+        if (null == defaultCrawler)
+            defaultCrawler = new CrawlerPack();
+        return defaultCrawler;
+    }
+
+    private List<Cookie> cookies = new ArrayList<Cookie>();
+
+
+    /**
+     * Creates a cookie with the given name and value.
+     *
+     * @param name    the cookie name
+     * @param value   the cookie value
+     * @return self
+     */
+    public CrawlerPack addCookie(String name, String value){
+        if( null == name ) {
+            log.warn("Cookie name null.");
+            return this;
+        }
+
+        cookies.add( new Cookie("", name, value) );
+
+        return this;
+    }
+
+    /**
+     * Creates a cookie with the given name, value, domain attribute,
+     * path attribute, expiration attribute, and secure attribute
+     *
+     * @param name    the cookie name
+     * @param value   the cookie value
+     * @param domain  the domain this cookie can be sent to
+     * @param path    the path prefix for which this cookie can be sent
+     * @param expires the {@link Date} at which this cookie expires,
+     *                or <tt>null</tt> if the cookie expires at the end
+     *                of the session
+     * @param secure if true this cookie can only be sent over secure
+     * connections
+     *
+     */
+    public CrawlerPack addCookie(String domain, String name, String value,
+                  String path, Date expires, boolean secure) {
+        if( null == name ) {
+            log.warn("Cookie name null.");
+            return this;
+        }
+
+        cookies.add(new Cookie(domain, name, value, path, expires, secure));
+        return this;
+    }
+
+    /**
+     * Return a Cookie array
+     * and auto importing domain and path when domain was empty.
+     *
+     * @param uri required Apache Common VFS supported file systems and response JSON format content.
+     * @return Cookie[]
+     */
+    Cookie[] getCookies(String uri){
+        if( null == cookies || 0 == cookies.size()) return null;
+
+        for(Cookie cookie: cookies){
+
+            if("".equals(cookie.getDomain())){
+                String domain = uri.replaceAll("^.*:\\/\\/([^\\/]+)[\\/]?.*$", "$1");
+                System.out.println(domain);
+                cookie.setDomain(domain);
+                cookie.setPath("/");
+                cookie.setExpiryDate(null);
+                cookie.setSecure(false);
+            }
+        }
+
+        return cookies.toArray(new Cookie[cookies.size()]);
+    }
+
+    /**
+     * Clear all cookies
+     */
+    void clearCookies(){
+        cookies = new ArrayList<Cookie>();
+    }
+
+
     /**
      * 取得遠端格式為 JSON 的資料
      *
-     * @param url required Apache Common VFS supported file systems and response JSON format content. 
+     * @param uri required Apache Common VFS supported file systems and response JSON format content.
      * @return org.jsoup.nodes.Document 
      */
-    public static org.jsoup.nodes.Document getFromJson(String url){
+    public org.jsoup.nodes.Document getFromJson(String uri){
         // 取回資料，並轉化為XML格式
-        String json = getFromRemote(url);
+        String json = getFromRemote(uri);
 
         // 將 json 轉化為 xml
         String xml  = jsonToXml(json);
@@ -71,12 +173,12 @@ public class CrawlerPack {
     /**
      * 取得遠端格式為 XML 的資料
      *
-     * @param url required Apache Common VFS supported file systems and response XML format content. 
+     * @param uri required Apache Common VFS supported file systems and response XML format content.
      * @return org.jsoup.nodes.Document 
      */
-    public static org.jsoup.nodes.Document getFromXml(String url){
+    public org.jsoup.nodes.Document getFromXml(String uri){
         // 取回資料，並轉化為XML格式
-        String xml = getFromRemote(url);
+        String xml = getFromRemote(uri);
 
         // 轉化為 Jsoup 物件
         return xmlToJsoupDoc(xml);
@@ -88,17 +190,17 @@ public class CrawlerPack {
      * @param url required Apache Common VFS supported file systems and response XML format content.
      * @return org.jsoup.nodes.Document 
      */
-    public static org.jsoup.nodes.Document getFromHtml(String url){
+    public org.jsoup.nodes.Document getFromHtml(String url){
         return getFromXml(url);
     }
 
     /**
      * 將 json 轉為 XML
      * 
-     * @param a json format string.
-     * @return
+     * @param json a json format string.
+     * @return XML format string
      */
-    public static String jsonToXml(String json){
+    public String jsonToXml(String json){
         String xml = "";
         // 處理直接以陣列開頭的JSON，並指定給予 row 的 tag
         if ( "[".equals( json.substring(0,1) ) ){
@@ -116,21 +218,31 @@ public class CrawlerPack {
      * 能使用的協定參考：
      * @see <a href="https://commons.apache.org/proper/commons-vfs/filesystems.html">commons-vfs filesystems</a>
      */
-    public static String getFromRemote(String url){
+    public String getFromRemote(String uri){
 
         // clear cache
         fileSystem.getFilesCache().close();
+
+        FileSystemOptions fsOptions = new FileSystemOptions();
+        HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri) );
+
+        String remoteContent = "";
+
         try {
+            log.debug("Loading remote URI:" + uri);
             // 透過  Apache VFS 取回指定的遠端資料
-            return IOUtils.toString(
-                    fileSystem.resolveFile(url).getContent().getInputStream()
+            remoteContent = IOUtils.toString(
+                    fileSystem.resolveFile(uri, fsOptions).getContent().getInputStream()
                     , "UTF-8"
             );
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-            return null;
+        }catch(IOException ioe){
+            // return empty
+            log.warn(ioe.getMessage());
         }
+
+        clearCookies();
+
+        return remoteContent;
     }
 
     // 替換字元：一定要是 a-zA-Z 開頭的組合
@@ -143,10 +255,10 @@ public class CrawlerPack {
      * 所以必需用騙的先置入 prefix
      * 再改寫xmlParse 在回傳時移除prefix
      *
-     * @param XML String
+     * @param xml XML format string
      * @return org.jsoup.nodes.Document
      */
-    public static org.jsoup.nodes.Document xmlToJsoupDoc(String xml){
+    public org.jsoup.nodes.Document xmlToJsoupDoc(String xml){
 
         // Tag 首字元非 a-zA-Z 時轉化為註解的問題
         xml = xml.replaceAll("<([^A-Za-z\\/! ][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
