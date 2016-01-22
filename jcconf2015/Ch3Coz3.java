@@ -22,7 +22,7 @@ public class Ch3Coz3 {
         String api = "http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=55ec6d6e-dc5c-4268-a725-d04cc262172b";
 
         // 2. 設定資料解析格式
-        Document jsoupDoc = CrawlerPack.getFromJson(api);
+        Document jsoupDoc = CrawlerPack.start().getFromJson(api);
 
         // 3. 用css selector取用資料
         // 目前往南勢角站的列車停靠站點
