@@ -16,7 +16,7 @@ public class Ch5Coz1 {
     static String url = "http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&fmt=4&cols=JOB,NAME&slmin=100000&sltp=S&pgsz=200";
 
     public static void main(String[] args){
-        Document original = CrawlerPack.getFromXml(url);
+        Document original = CrawlerPack.start().getFromXml(url);
 
         // 檢視 xml 內容
         //System.out.println(original.toString());
