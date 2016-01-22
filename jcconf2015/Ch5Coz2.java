@@ -28,7 +28,7 @@ public class Ch5Coz2 {
 
     public static void main(String[] args){
 
-        Document original = CrawlerPack.getFromJson(url);
+        Document original = CrawlerPack.start().getFromJson(url);
 
         // 檢視 xml 內容
         //System.out.println(original.toString());
