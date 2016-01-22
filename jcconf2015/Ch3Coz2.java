@@ -17,14 +17,14 @@ public class Ch3Coz2 {
         String api = "http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=55ec6d6e-dc5c-4268-a725-d04cc262172b";
 
         // call remote api
-        String json = CrawlerPack.getFromRemote(api);
+        String json = CrawlerPack.start().getFromRemote(api);
 
         // 轉換至xml
-        String xml  = CrawlerPack.jsonToXml(json);
+        String xml  = CrawlerPack.start().jsonToXml(json);
         // System.out.println( xml );
 
         // 轉化為 jsoup 物件
-        Document jsoupDoc = CrawlerPack.xmlToJsoupDoc(xml);
+        Document jsoupDoc = CrawlerPack.start().xmlToJsoupDoc(xml);
 
         // 目前往南勢角站的列車停靠站點
         System.out.println("目前往南勢角站的列車停靠站點：");
