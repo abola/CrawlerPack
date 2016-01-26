@@ -27,6 +27,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.parser.PrefixXmlTreeBuilder;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,10 +239,23 @@ public class CrawlerPack {
             FileContent fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
             fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
 
-            log.debug("file encoding: " + encoding);
+            String remoteEncoding = fileContent.getContentInfo().getContentEncoding();
+
+            if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
+                log.debug("remote content encoding: " + remoteEncoding);
+
+                // force charset encoding if setRemoteEncoding set
+                if (! "utf".equalsIgnoreCase(encoding.substring(0, 3)) ){
+                    remoteEncoding = encoding;
+                }else{
+                    // auto detecting encoding
+                    remoteEncoding = detectCharset( IOUtils.toByteArray( fileContent.getInputStream() ) );
+                    log.debug("real encoding: " + remoteEncoding);
+                }
+            }
 
             // 透過  Apache VFS 取回指定的遠端資料
-            remoteContent = IOUtils.toString( fileContent.getInputStream(), encoding);
+            remoteContent = IOUtils.toString( fileContent.getInputStream(), remoteEncoding);
 
         }catch(IOException ioe){
             // return empty
@@ -308,4 +322,30 @@ public class CrawlerPack {
         this.encoding = encoding;
         return this;
     }
+
+    private String detectCharset(byte[] content){
+        return detectCharset(content, 0);
+    }
+
+    final int detectBuffer = 1000;
+
+    /**
+     * Detecting real content encoding
+     * @param content
+     * @param offset
+     * @return real charset encoding
+     */
+    private String detectCharset(byte[] content, int offset){
+        // detect failed
+        if( offset > content.length ) return null;
+
+        UniversalDetector detector = new UniversalDetector(null);
+        detector.handleData(content, offset, content.length - offset > detectBuffer ? detectBuffer : content.length - offset);
+        detector.dataEnd();
+
+        String detectEncoding = detector.getDetectedCharset();
+
+        return null==detectEncoding?detectCharset(content,offset+detectBuffer):detectEncoding;
+    }
+
 }

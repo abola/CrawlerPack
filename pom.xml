@@ -74,6 +74,13 @@
             <version>1.7.13</version>
         </dependency>
 
+        <!-- detect string encoding -->
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
     </dependencies>
 
   <properties>
