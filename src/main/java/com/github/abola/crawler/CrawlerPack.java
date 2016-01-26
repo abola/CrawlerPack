@@ -15,7 +15,6 @@
  */
 package com.github.abola.crawler;
 
-import com.google.common.base.Stopwatch;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.*;
@@ -235,7 +234,6 @@ public class CrawlerPack {
 
         String remoteContent = "";
 
-        Stopwatch sw = Stopwatch.createStarted();
         try {
             log.debug("Loading remote URI:" + uri);
 
