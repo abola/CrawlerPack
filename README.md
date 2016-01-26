@@ -10,13 +10,13 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 To add a dependency using Gradle:
 ```
 dependencies {
-    compile 'com.github.abola:crawler:1.0.0'
+    compile 'com.github.abola:crawler:1.0.1'
 }
 ```
 
@@ -57,8 +57,23 @@ JSON
     , {"元素":"元素名稱2"}
 ]}
 ```
+### 自動偵測遠端資料編碼
+爬蟲包建議使用 UTF-8 操作資料。針對非 UTF-8 編碼的遠端資料，爬蟲包預設會啟動自動偵測編碼，並將其轉換為 UTF-8 編碼。
 
-## 使用範例
+注意，預設啟用的自動編碼，效能會明顯的不如直接指定編碼，平均測試較直接指定編碼的目標多出300ms以上耗費時間。如果遠端資料非 UTF-8 編碼，你進行的是大量資料擷取，直接指定遠端編碼，可有效減少你作業整體耗時。
+
+```java
+// TWSE 2015'三大法人買賣金額統計表
+String uri = "http://www.twse.com.tw/ch/trading/fund/BFI82U/BFI82U_print.php"
+            +"?begin_date=20150101&end_date=20151231&report_type=month";
+
+CrawlerPack.start()
+    .setRemoteEncoding("big5")  // 直接指定遠端編碼
+    .getFromHtml(uri)
+    .select("table.board_trad > tbody > tr:nth-child(7) > td:nth-child(4)").text()
+```
+
+## 一般使用範例
 
 #### JSON format example
 ```java
@@ -112,10 +127,15 @@ CrawlerPack.start()
     .select("sarea, ar, tot, sbi").text();
 ```
 
-## 發展中項目 
+## Milestone
 * 給點建議如何 https://github.com/abola/CrawlerPack/issues/new
 
 ## Change log
+#### 1.0.1
+* 調整 getFromHtml 改使用 Jsoup 內建 Html parser
+* 增加自動編碼偵測功能  (add library juniversalchardet)
+* 增加 setRemoteEncoding(String encoding) 設定遠端內文編碼
+
 #### 1.0.0
 * 調整 api 操作界面
 * 增加對Cookie的支援
