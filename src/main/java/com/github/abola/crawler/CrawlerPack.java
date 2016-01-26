@@ -15,6 +15,7 @@
  */
 package com.github.abola.crawler;
 
+import com.google.common.base.Stopwatch;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.*;
@@ -32,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -233,6 +235,7 @@ public class CrawlerPack {
 
         String remoteContent = "";
 
+        Stopwatch sw = Stopwatch.createStarted();
         try {
             log.debug("Loading remote URI:" + uri);
 
@@ -240,6 +243,9 @@ public class CrawlerPack {
             fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
 
             String remoteEncoding = fileContent.getContentInfo().getContentEncoding();
+
+            InputStream inStream = fileContent.getInputStream();
+
 
             if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
                 log.debug("remote content encoding: " + remoteEncoding);
@@ -249,13 +255,13 @@ public class CrawlerPack {
                     remoteEncoding = encoding;
                 }else{
                     // auto detecting encoding
-                    remoteEncoding = detectCharset( IOUtils.toByteArray( fileContent.getInputStream() ) );
-                    log.debug("real encoding: " + remoteEncoding);
+                    remoteEncoding = detectCharset(IOUtils.toByteArray( inStream ) );
+                    log.warn("real encoding: " + remoteEncoding);
                 }
             }
 
             // 透過  Apache VFS 取回指定的遠端資料
-            remoteContent = IOUtils.toString( fileContent.getInputStream(), remoteEncoding);
+            remoteContent = IOUtils.toString( inStream, remoteEncoding);
 
         }catch(IOException ioe){
             // return empty
@@ -327,7 +333,7 @@ public class CrawlerPack {
         return detectCharset(content, 0);
     }
 
-    final int detectBuffer = 1000;
+    final Integer detectBuffer = 1000;
 
     /**
      * Detecting real content encoding
@@ -335,7 +341,9 @@ public class CrawlerPack {
      * @param offset
      * @return real charset encoding
      */
-    private String detectCharset(byte[] content, int offset){
+    private String detectCharset(byte[] content, Integer offset){
+        log.debug("offset: " + offset);
+
         // detect failed
         if( offset > content.length ) return null;
 
