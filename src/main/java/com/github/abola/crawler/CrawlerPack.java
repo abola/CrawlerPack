@@ -62,10 +62,9 @@ public class CrawlerPack {
     static CrawlerPack defaultCrawler ;
 
     /**
+     * Create a CrawlerPack instance
      *
-     *
-     *
-     * @return
+     * @return CrawlerPack
      */
     public static CrawlerPack start(){
         if (null == defaultCrawler)
@@ -81,7 +80,7 @@ public class CrawlerPack {
      *
      * @param name    the cookie name
      * @param value   the cookie value
-     * @return self
+     * @return CrawlerPack
      */
     public CrawlerPack addCookie(String name, String value){
         if( null == name ) {
@@ -171,6 +170,20 @@ public class CrawlerPack {
     }
 
     /**
+     * 取得遠端格式為 HTML/Html5 的資料
+     *
+     * @param uri required Apache Common VFS supported file systems and response HTML format content.
+     * @return org.jsoup.nodes.Document
+     */
+    public org.jsoup.nodes.Document getFromHtml(String uri){
+        // 取回資料
+        String html = getFromRemote(uri);
+
+        // 轉化為 Jsoup 物件
+        return htmlToJsoupDoc(html);
+    }
+
+    /**
      * 取得遠端格式為 XML 的資料
      *
      * @param uri required Apache Common VFS supported file systems and response XML format content.
@@ -184,19 +197,10 @@ public class CrawlerPack {
         return xmlToJsoupDoc(xml);
     }
 
-    /**
-     * HTML 與 XML 處理模式相同
-     * 
-     * @param url required Apache Common VFS supported file systems and response XML format content.
-     * @return org.jsoup.nodes.Document 
-     */
-    public org.jsoup.nodes.Document getFromHtml(String url){
-        return getFromXml(url);
-    }
 
     /**
      * 將 json 轉為 XML
-     * 
+     *
      * @param json a json format string.
      * @return XML format string
      */
@@ -230,11 +234,15 @@ public class CrawlerPack {
 
         try {
             log.debug("Loading remote URI:" + uri);
+
+            FileContent fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
+            fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
+
+            log.debug("file encoding: " + encoding);
+
             // 透過  Apache VFS 取回指定的遠端資料
-            remoteContent = IOUtils.toString(
-                    fileSystem.resolveFile(uri, fsOptions).getContent().getInputStream()
-                    , "UTF-8"
-            );
+            remoteContent = IOUtils.toString( fileContent.getInputStream(), encoding);
+
         }catch(IOException ioe){
             // return empty
             log.warn(ioe.getMessage());
@@ -243,6 +251,23 @@ public class CrawlerPack {
         clearCookies();
 
         return remoteContent;
+    }
+
+    /**
+     * 將 HTML 轉化為 Jsoup Document 物件
+     *
+     * HTML的內容就使用Jsoup原生的 HTML Parser
+     *
+     * @param html Html document
+     * @return org.jsoup.nodes.Document
+     */
+    public org.jsoup.nodes.Document htmlToJsoupDoc(String html){
+
+        // 將 html(html/html5) 轉為 jsoup Document 物件
+        Document jsoupDoc = Jsoup.parse(html, "UTF-8", Parser.htmlParser() );
+        jsoupDoc.charset(StandardCharsets.UTF_8);
+
+        return jsoupDoc;
     }
 
     // 替換字元：一定要是 a-zA-Z 開頭的組合
@@ -264,10 +289,23 @@ public class CrawlerPack {
         xml = xml.replaceAll("<([^A-Za-z\\/! ][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
                  .replaceAll("<\\/([^A-Za-z\\/ ][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
 
-        // 將 xml(html/html5) 轉為 jsoup Document 物件
+        // 將 xml 轉為 jsoup Document 物件
         Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new PrefixXmlTreeBuilder(prefix.toLowerCase()) ) );
         jsoupDoc.charset(StandardCharsets.UTF_8);
 
         return jsoupDoc;
+    }
+
+    private String encoding = "utf-8";
+
+    /**
+     * 指定來源資料的編碼格式
+     * 必需要在 get 前設定
+     *
+     * @return CrawlerPack
+     */
+    public CrawlerPack setRemoteEncoding(String encoding){
+        this.encoding = encoding;
+        return this;
     }
 }
