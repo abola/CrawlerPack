@@ -242,9 +242,6 @@ public class CrawlerPack {
 
             String remoteEncoding = fileContent.getContentInfo().getContentEncoding();
 
-            InputStream inStream = fileContent.getInputStream();
-
-
             if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
                 log.debug("remote content encoding: " + remoteEncoding);
 
@@ -253,13 +250,14 @@ public class CrawlerPack {
                     remoteEncoding = encoding;
                 }else{
                     // auto detecting encoding
-                    remoteEncoding = detectCharset(IOUtils.toByteArray( inStream ) );
-                    log.warn("real encoding: " + remoteEncoding);
+                    remoteEncoding = detectCharset(IOUtils.toByteArray( fileContent.getInputStream() ) );
+                    log.info("real encoding: " + remoteEncoding);
                 }
             }
 
             // 透過  Apache VFS 取回指定的遠端資料
-            remoteContent = IOUtils.toString( inStream, remoteEncoding);
+            // 2016-02-29 fixed
+            remoteContent = IOUtils.toString( fileContent.getInputStream(), remoteEncoding);
 
         }catch(IOException ioe){
             // return empty
