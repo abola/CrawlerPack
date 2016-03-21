@@ -135,7 +135,7 @@ public class CrawlerPack {
 
             if("".equals(cookie.getDomain())){
                 String domain = uri.replaceAll("^.*:\\/\\/([^\\/]+)[\\/]?.*$", "$1");
-                System.out.println(domain);
+//                System.out.println(domain);
                 cookie.setDomain(domain);
                 cookie.setPath("/");
                 cookie.setExpiryDate(null);
@@ -241,6 +241,9 @@ public class CrawlerPack {
             fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
 
             String remoteEncoding = fileContent.getContentInfo().getContentEncoding();
+
+            // 2016-03-21 修正zip file getContentEncoding 為null
+            if ( null == remoteEncoding) remoteEncoding = "utf8";
 
             if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
                 log.debug("remote content encoding: " + remoteEncoding);
