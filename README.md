@@ -106,13 +106,13 @@ CrawlerPack.start()
 
 #### Cookie example
 ```java
-// ptt 八掛版創立首篇廢文
+// ptt 八掛版創立首篇廢文標題
 String url = "https://www.ptt.cc/bbs/Gossiping/M.1119222611.A.7A9.html";
 
 CrawlerPack.start()
     .addCookie("over18","1")  // 必需在 getFromXXX 前設定Cookie
     .getFromHtml(url)
-    .select("#main-content > div").get(2).text();
+    .select("span:containsOwn(標題) + span:eq(1)").text();
 ```
 
 #### Compressed data example
