@@ -233,17 +233,18 @@ public class CrawlerPack {
         HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri) );
 
         String remoteContent = "";
+        String remoteEncoding = "utf-8";
 
         try {
             log.debug("Loading remote URI:" + uri);
-
             FileContent fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
-            fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
-
-            String remoteEncoding = fileContent.getContentInfo().getContentEncoding();
-
+           // 2016-03-22 only pure http/https auto detect encoding
+            if ( "http".equalsIgnoreCase( uri.substring(0,4) ) ) {
+                fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
+                remoteEncoding = fileContent.getContentInfo().getContentEncoding();
+            }
             // 2016-03-21 修正zip file getContentEncoding 為null
-            if ( null == remoteEncoding) remoteEncoding = "utf8";
+            if ( null == remoteEncoding) remoteEncoding = "utf-8";
 
             if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
                 log.debug("remote content encoding: " + remoteEncoding);
@@ -265,6 +266,9 @@ public class CrawlerPack {
         }catch(IOException ioe){
             // return empty
             log.warn(ioe.getMessage());
+        }catch(StringIndexOutOfBoundsException stre){
+            log.warn("uri: " + uri );
+            log.warn(stre.getMessage());
         }
 
         clearCookies();
