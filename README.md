@@ -10,13 +10,13 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 To add a dependency using Gradle:
 ```
 dependencies {
-    compile 'com.github.abola:crawler:1.0.2'
+    compile 'com.github.abola:crawler:1.0.3'
 }
 ```
 
@@ -131,6 +131,9 @@ CrawlerPack.start()
 * 給點建議如何 https://github.com/abola/CrawlerPack/issues/new
 
 ## Change log
+#### 1.0.3
+* 修正(跳過) 壓縮格式無法取得字元長度的臭蟲
+
 #### 1.0.2
 * 修正抓取含路徑的打包檔時會出現 NullPointerException 問題
 * 修正自動編碼偵測造成資料清空的bug
