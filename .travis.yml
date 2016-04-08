@@ -1,6 +1,5 @@
----
 language: java
+script:
+  - mvn clean complie test
 jdk:
   - oraclejdk7
-script: mvn test
-sudo: false
