@@ -145,19 +145,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>4.11</version>
-          <executions>
-              <execution>
-                  <id>unit-test</id>
-                  <goals>
-                      <goal>test</goal>
-                  </goals>
-              </execution>
-          </executions>
-      </plugin>
     </plugins>
   </build>
 </project>
