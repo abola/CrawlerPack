@@ -1,11 +1,11 @@
 ---
 language: java
-script: mvn test
+script: mvn clean build test
 jdk:
 - openjdk7
 matrix:
   include:
   - jdk: oraclejdk7
-    script: mvn test
+    script: mvn clean build test
   - jdk: oraclejdk8
-    script: mvn test
+    script: mvn clean build test
