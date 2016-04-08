@@ -1,11 +1,7 @@
 ---
 language: java
-script: mvn clean build test
 jdk:
-- openjdk7
-matrix:
-  include:
-  - jdk: oraclejdk7
-    script: mvn clean build test
-  - jdk: oraclejdk8
-    script: mvn clean build test
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+sudo: false
