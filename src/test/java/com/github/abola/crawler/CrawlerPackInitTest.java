@@ -16,4 +16,15 @@ public class CrawlerPackInitTest {
             Assert.fail( "Create CrawlerPack instance fail. Cause by: " + anyException.getMessage() );
         }
     }
+
+    @Test
+    public void loadRemoteFile(){
+        try {
+            CrawlerPack
+                .start()
+                .getFromRemote("https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json");
+        }catch ( Exception anyException ){
+            Assert.fail( "Load remote file fail. Cause by: " + anyException.getMessage() );
+        }
+    }
 }
