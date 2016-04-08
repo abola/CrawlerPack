@@ -94,7 +94,7 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
-    
+  <!-- for upload Open Maven Repo
   <build>
     <plugins>
       <plugin>
@@ -147,4 +147,5 @@
       </plugin>
     </plugins>
   </build>
+  -->
 </project>
