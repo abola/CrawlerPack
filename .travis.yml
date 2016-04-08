@@ -1,5 +1,5 @@
 language: java
 script:
-  - mvn clean complie test
+  - mvn clean -Dmaven.install.skip=true complie test
 jdk:
   - oraclejdk7
