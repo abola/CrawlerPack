@@ -3,4 +3,4 @@ jdk:
   - oraclejdk7
 
 script:
-  - mvn clean complie test
+  - mvn clean compile test
