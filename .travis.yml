@@ -1,0 +1,11 @@
+---
+language: java
+script: mvn test
+jdk:
+- openjdk7
+matrix:
+  include:
+  - jdk: oraclejdk7
+    script: mvn test
+  - jdk: oraclejdk8
+    script: mvn test
