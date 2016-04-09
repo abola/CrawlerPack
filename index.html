@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>CrawlerPack by abola</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>CrawlerPack</h1>
+        <p>Java 網路資料爬蟲包</p>
+        <p class="view"><a href="https://github.com/abola/CrawlerPack">View the Project on GitHub <small>abola/CrawlerPack</small></a></p>
+        <ul>
+          <li><a href="https://github.com/abola/CrawlerPack/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/abola/CrawlerPack/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/abola/CrawlerPack">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="java-網路資料爬蟲包" class="anchor" href="#java-%E7%B6%B2%E8%B7%AF%E8%B3%87%E6%96%99%E7%88%AC%E8%9F%B2%E5%8C%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Java 網路資料爬蟲包</h1>
+
+<p><a href="https://maven-badges.herokuapp.com/maven-central/com.github.abola/crawler"><img src="https://maven-badges.herokuapp.com/maven-central/com.github.abola/crawler/badge.svg" alt="Maven Central"></a>
+<a href="https://travis-ci.org/abola/CrawlerPack"><img src="https://travis-ci.org/abola/CrawlerPack.svg" alt="Travis-ci build status"></a></p>
+
+<p>本套件為網路上常見的資料協定、格式，提供了簡易且方便(easy-to-use)的操作接口。套件主要以Jsoup為核心擴展，整合Apache Commons-VFS後，提供更多種協定的操作，也可支援壓縮格式處理。</p>
+
+<p>Requires JDK 1.7 or higher</p>
+
+<p>To add a dependency on CrawlerPack using Maven, use the following:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.github.abola&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;crawler&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;1.0.3&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>To add a dependency using Gradle:</p>
+
+<pre><code>dependencies {
+    compile 'com.github.abola:crawler:1.0.3'
+}
+</code></pre>
+
+<p>And easy-to-use example</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// URI format source</span>
+<span class="pl-smi">String</span> uri <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>https://raw.githubusercontent.com/abola/CrawlerPack/master/test.json<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .getFromJson(uri)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>results name<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text() ;</pre></div>
+
+<h2>
+<a id="爬蟲包特色" class="anchor" href="#%E7%88%AC%E8%9F%B2%E5%8C%85%E7%89%B9%E8%89%B2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>爬蟲包特色</h2>
+
+<h3>
+<a id="支援常見網路協定" class="anchor" href="#%E6%94%AF%E6%8F%B4%E5%B8%B8%E8%A6%8B%E7%B6%B2%E8%B7%AF%E5%8D%94%E5%AE%9A" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>支援常見網路協定</h3>
+
+<p>使用 Apache Commons-VFS 所支援所有協定，常見網路協定如http/https,samba(cifs),ftp,sftp等…詳細列表請參考 <a href="https://commons.apache.org/proper/commons-vfs/filesystems.html">https://commons.apache.org/proper/commons-vfs/filesystems.html</a></p>
+
+<h3>
+<a id="支援常見資料格式" class="anchor" href="#%E6%94%AF%E6%8F%B4%E5%B8%B8%E8%A6%8B%E8%B3%87%E6%96%99%E6%A0%BC%E5%BC%8F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>支援常見資料格式</h3>
+
+<ul>
+<li>JSON</li>
+<li>XML</li>
+<li>HTML </li>
+</ul>
+
+<h3>
+<a id="支援-中文xml標籤--中文json欄位" class="anchor" href="#%E6%94%AF%E6%8F%B4-%E4%B8%AD%E6%96%87xml%E6%A8%99%E7%B1%A4--%E4%B8%AD%E6%96%87json%E6%AC%84%E4%BD%8D" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>支援 中文XML標籤 / 中文JSON欄位</h3>
+
+<p>爬蟲包套件可正常的處理使用中文命名的XML或JSON</p>
+
+<p>XML</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;集合&gt;
+    &lt;元素&gt;元素名稱1&lt;/元素&gt;
+    &lt;元素&gt;元素名稱2&lt;/元素&gt;
+&lt;/集合&gt;</pre></div>
+
+<p>JSON</p>
+
+<div class="highlight highlight-source-json"><pre>{<span class="pl-s"><span class="pl-pds">"</span>集合<span class="pl-pds">"</span></span>:[
+    {<span class="pl-s"><span class="pl-pds">"</span>元素<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">"</span>元素名稱1<span class="pl-pds">"</span></span>}
+    , {<span class="pl-s"><span class="pl-pds">"</span>元素<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">"</span>元素名稱2<span class="pl-pds">"</span></span>}
+]}</pre></div>
+
+<h3>
+<a id="自動偵測遠端資料編碼" class="anchor" href="#%E8%87%AA%E5%8B%95%E5%81%B5%E6%B8%AC%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E7%B7%A8%E7%A2%BC" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>自動偵測遠端資料編碼</h3>
+
+<p>爬蟲包建議使用 UTF-8 操作資料。針對非 UTF-8 編碼的遠端資料，爬蟲包預設會啟動自動偵測編碼，並將其轉換為 UTF-8 編碼。</p>
+
+<p>注意，預設啟用的自動編碼，效能會明顯的不如直接指定編碼，平均測試較直接指定編碼的目標多出300ms以上耗費時間。如果遠端資料非 UTF-8 編碼，你進行的是大量資料擷取，直接指定遠端編碼，可有效減少你作業整體耗時。</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// TWSE 2015'三大法人買賣金額統計表</span>
+<span class="pl-smi">String</span> uri <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://www.twse.com.tw/ch/trading/fund/BFI82U/BFI82U_print.php<span class="pl-pds">"</span></span>
+            <span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>?begin_date=20150101&amp;end_date=20151231&amp;report_type=month<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .setRemoteEncoding(<span class="pl-s"><span class="pl-pds">"</span>big5<span class="pl-pds">"</span></span>)  <span class="pl-c">// 直接指定遠端編碼</span>
+    .getFromHtml(uri)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>table.board_trad &gt; tbody &gt; tr:nth-child(7) &gt; td:nth-child(4)<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text()</pre></div>
+
+<h2>
+<a id="一般使用範例" class="anchor" href="#%E4%B8%80%E8%88%AC%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>一般使用範例</h2>
+
+<h4>
+<a id="json-format-example" class="anchor" href="#json-format-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JSON format example</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 即時PM2.5資料</span>
+<span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://opendata2.epa.gov.tw/AQX.json<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .getFromJson(url)
+    .getElementsByTag(<span class="pl-s"><span class="pl-pds">"</span>pm2.5<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text();</pre></div>
+
+<h4>
+<a id="xml-format-example" class="anchor" href="#xml-format-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>XML format example</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 104司人力銀行上 10萬月薪以上的工作資料</span>
+<span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&amp;fmt=4&amp;cols=JOB,NAME&amp;slmin=100000&amp;sltp=S&amp;pgsz=20<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .getFromXml(url)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>item<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>get(<span class="pl-c1">0</span>)<span class="pl-k">.</span>attr(<span class="pl-s"><span class="pl-pds">"</span>job<span class="pl-pds">"</span></span>) ;</pre></div>
+
+<h4>
+<a id="html-format-example" class="anchor" href="#html-format-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Html format example</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// ptt 笨版最新文章列表</span>
+<span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>https://www.ptt.cc/bbs/StupidClown/index.html<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .getFromHtml(url)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>div.title &gt; a<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text();</pre></div>
+
+<h4>
+<a id="cookie-example" class="anchor" href="#cookie-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cookie example</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// ptt 八掛版創立首篇廢文標題</span>
+<span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>https://www.ptt.cc/bbs/Gossiping/M.1119222611.A.7A9.html<span class="pl-pds">"</span></span>;
+
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .addCookie(<span class="pl-s"><span class="pl-pds">"</span>over18<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>)  <span class="pl-c">// 必需在 getFromXXX 前設定Cookie</span>
+    .getFromHtml(url)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>span:containsOwn(標題) + span:eq(1)<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text();</pre></div>
+
+<h4>
+<a id="compressed-data-example" class="anchor" href="#compressed-data-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compressed data example</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 北市Youbike資訊</span>
+<span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz<span class="pl-pds">"</span></span>;
+
+<span class="pl-c">// 目前編號0004站借用資訊</span>
+<span class="pl-smi">CrawlerPack</span><span class="pl-k">.</span>start()
+    .getFromJson(url)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>0004<span class="pl-pds">"</span></span>)
+    .select(<span class="pl-s"><span class="pl-pds">"</span>sarea, ar, tot, sbi<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>text();</pre></div>
+
+<h2>
+<a id="milestone" class="anchor" href="#milestone" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Milestone</h2>
+
+<ul>
+<li>給點建議如何 <a href="https://github.com/abola/CrawlerPack/issues/new">https://github.com/abola/CrawlerPack/issues/new</a>
+</li>
+</ul>
+
+<h2>
+<a id="change-log" class="anchor" href="#change-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Change log</h2>
+
+<h4>
+<a id="103" class="anchor" href="#103" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.0.3</h4>
+
+<ul>
+<li>修正(跳過) 壓縮格式無法取得字元長度的臭蟲</li>
+</ul>
+
+<h4>
+<a id="102" class="anchor" href="#102" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.0.2</h4>
+
+<ul>
+<li>修正抓取含路徑的打包檔時會出現 NullPointerException 問題</li>
+<li>修正自動編碼偵測造成資料清空的bug</li>
+</ul>
+
+<h4>
+<a id="101" class="anchor" href="#101" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.0.1</h4>
+
+<ul>
+<li>調整 getFromHtml 改使用 Jsoup 內建 Html parser</li>
+<li>增加自動編碼偵測功能  (add library juniversalchardet)</li>
+<li>增加 setRemoteEncoding(String encoding) 設定遠端內文編碼</li>
+</ul>
+
+<h4>
+<a id="100" class="anchor" href="#100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.0.0</h4>
+
+<ul>
+<li>調整 api 操作界面</li>
+<li>增加對Cookie的支援</li>
+</ul>
+
+<h4>
+<a id="092" class="anchor" href="#092" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.9.2</h4>
+
+<ul>
+<li>修正解析註解以及 js 中特殊符號的錯誤</li>
+<li>修正動態網頁資料被cache的問題</li>
+</ul>
+
+<h4>
+<a id="091" class="anchor" href="#091" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.9.1</h4>
+
+<ul>
+<li>增加授權，使用Apache 2.0 公開授權</li>
+<li>專案已上傳至公開的 Maven Repository 現在可以直接透過pom.xml使用爬蟲包</li>
+<li>修正 https PKIX 驗證無法通過的問題</li>
+</ul>
+
+<h2>
+<a id="reference" class="anchor" href="#reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+<li>JCConf 2015 TW 高效率資料爬蟲組合包 投影片 <a href="http://www.slideshare.net/ssuser438746/jcconf-2015-tw">http://www.slideshare.net/ssuser438746/jcconf-2015-tw</a>
+</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/abola">abola</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
