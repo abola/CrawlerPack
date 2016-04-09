@@ -102,7 +102,7 @@
 
 <p>爬蟲包建議使用 UTF-8 操作資料。針對非 UTF-8 編碼的遠端資料，爬蟲包預設會啟動自動偵測編碼，並將其轉換為 UTF-8 編碼。</p>
 
-<p>注意，預設啟用的自動編碼，效能會明顯的不如直接指定編碼，平均測試較直接指定編碼的目標多出300ms以上耗費時間。如果遠端資料非 UTF-8 編碼，你進行的是大量資料擷取，直接指定遠端編碼，可有效減少你作業整體耗時。</p>
+<p>注意，預設啟用的自動編碼，效能會明顯的不如直接指定編碼，平均測試較直接指定編碼的目標多出300ms以上耗費時間。如果遠端資料非 UTF-8 編碼，大量資料擷取時，直接指定遠端編碼，可有效減少你作業整體耗時。</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-c">// TWSE 2015'三大法人買賣金額統計表</span>
 <span class="pl-smi">String</span> uri <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://www.twse.com.tw/ch/trading/fund/BFI82U/BFI82U_print.php<span class="pl-pds">"</span></span>
