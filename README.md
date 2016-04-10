@@ -127,7 +127,7 @@ CrawlerPack.start()
     .select("retVal > *:contains(大安區)")
 ```
 
-### Tips
+## Tips
 爬蟲包的主要目標，是提供簡易入門的操作模式。然而爬蟲包的效能並不理想，主要原因是編碼偵測
 ，為了降低預設操作難度，使用了 [juniversalchardet](https://code.google.com/archive/p/juniversalchardet/)
 自動偵測遠端內容編碼。直接指定遠端編碼可跳過自動偵測，提升一點效能。如果遠端為UTF8編碼
@@ -159,9 +159,10 @@ System.out.println( timer.stop().toString() );
 // avg 480ms 
 ```
 
+----
 
 ### 已知問題
-部份
+簡址
 
 
 ## Change log
