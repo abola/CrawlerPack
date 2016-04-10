@@ -79,56 +79,55 @@ CrawlerPack.start()
 #### JSON format example
 ```java
 // 即時PM2.5資料
-String url = "http://opendata2.epa.gov.tw/AQX.json";
+String uri = "http://opendata2.epa.gov.tw/AQX.json";
 
 CrawlerPack.start()
-    .getFromJson(url)
+    .getFromJson(uri)
     .getElementsByTag("pm2.5").text();
 ```
 
 #### XML format example
 ```java    
 // 104司人力銀行上 10萬月薪以上的工作資料
-String url = "http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&fmt=4&cols=JOB,NAME&slmin=100000&sltp=S&pgsz=20";
+String uri = "http://www.104.com.tw/i/apis/jobsearch.cfm?order=2&fmt=4&cols=JOB,NAME&slmin=100000&sltp=S&pgsz=20";
     
 CrawlerPack.start()
-    .getFromXml(url)
+    .getFromXml(uri)
     .select("item").get(0).attr("job") ;
 ```
 #### Html format example
 ```java
 // ptt 笨版最新文章列表
-String url = "https://www.ptt.cc/bbs/StupidClown/index.html";
+String uri = "https://www.ptt.cc/bbs/StupidClown/index.html";
 
 CrawlerPack.start()
-    .getFromHtml(url)
+    .getFromHtml(uri)
     .select("div.title > a").text();
 ```
 
 #### Cookie example
 ```java
 // ptt 八掛版創立首篇廢文標題
-String url = "https://www.ptt.cc/bbs/Gossiping/M.1119222611.A.7A9.html";
+String uri = "https://www.ptt.cc/bbs/Gossiping/M.1119222611.A.7A9.html";
 
 CrawlerPack.start()
     .addCookie("over18","1")  // 必需在 getFromXXX 前設定Cookie
-    .getFromHtml(url)
+    .getFromHtml(uri)
     .select("span:containsOwn(標題) + span:eq(1)").text();
 ```
 
 #### Compressed data example
 ```java
 // 北市Youbike資訊
-String url = "gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz";
-    
-// 目前編號0004站借用資訊
+String uri = "gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz";
+
+// 列出所有大安區內的租借站
 CrawlerPack.start()
-    .getFromJson(url)
-    .select("0004")
-    .select("sarea, ar, tot, sbi").text();
+    .getFromJson(uri)
+    .select("retVal > *:contains(大安區)")
 ```
 
-#### Tips
+### Tips
 爬蟲包的主要目標，是提供簡易入門的操作模式。然而爬蟲包的效能並不理想，主要原因是編碼偵測
 ，為了降低預設操作難度，使用了 [juniversalchardet](https://code.google.com/archive/p/juniversalchardet/)
 自動偵測遠端內容編碼。直接指定遠端編碼可跳過自動偵測，提升一點效能。如果遠端為UTF8編碼
@@ -159,6 +158,10 @@ CrawlerPack.start()
 System.out.println( timer.stop().toString() );
 // avg 480ms 
 ```
+
+
+### 已知問題
+部份
 
 
 ## Change log
