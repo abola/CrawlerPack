@@ -128,8 +128,38 @@ CrawlerPack.start()
     .select("sarea, ar, tot, sbi").text();
 ```
 
-## Milestone
-* 給點建議如何 https://github.com/abola/CrawlerPack/issues/new
+#### Tips
+爬蟲包的主要目標，是提供簡易入門的操作模式。然而爬蟲包的效能並不理想，主要原因是編碼偵測
+，為了降低預設操作難度，使用了 [juniversalchardet](https://code.google.com/archive/p/juniversalchardet/)
+自動偵測遠端內容編碼。直接指定遠端編碼可跳過自動偵測，提升一點效能。如果遠端為UTF8編碼
+，便不需要再指定。
+
+
+以台灣證交所網站為例，若不指定編碼時，平均約600ms完成
+```java
+// TWSE 2015'三大法人買賣金額統計表
+String uri = "http://www.twse.com.tw/ch/trading/fund/BFI82U/BFI82U_print.php"
+            +"?begin_date=20150101&end_date=20151231&report_type=month";
+
+# Guava Stopwatch
+Stopwatch timer = Stopwatch.createStarted();
+CrawlerPack.start()
+    .getFromHtml(uri);
+System.out.println( timer.stop().toString() );
+// avg 600ms 
+```
+
+
+指定遠端編碼為big5後，減少了一點時間，減少的時間，會與你的處理器效能有關
+```java
+Stopwatch timer = Stopwatch.createStarted();
+CrawlerPack.start()
+    .setRemoteEncoding("big5")
+    .getFromHtml(uri);
+System.out.println( timer.stop().toString() );
+// avg 480ms 
+```
+
 
 ## Change log
 #### 1.0.3

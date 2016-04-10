@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -50,6 +49,7 @@ public class CrawlerPack {
 
     static{
         // create a Self-signed Server Certificates
+        // for pass SSL
         XTrustProvider.install();
 
         try {
@@ -74,7 +74,7 @@ public class CrawlerPack {
         return defaultCrawler;
     }
 
-    private List<Cookie> cookies = new ArrayList<Cookie>();
+    private List<Cookie> cookies = new ArrayList<>();
 
 
     /**
@@ -150,7 +150,7 @@ public class CrawlerPack {
      * Clear all cookies
      */
     void clearCookies(){
-        cookies = new ArrayList<Cookie>();
+        cookies = new ArrayList<>();
     }
 
 
@@ -229,50 +229,64 @@ public class CrawlerPack {
         // clear cache
         fileSystem.getFilesCache().close();
 
-        FileSystemOptions fsOptions = new FileSystemOptions();
-        HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri) );
-
-        String remoteContent = "";
+        String remoteContent ;
         String remoteEncoding = "utf-8";
 
+        log.debug("Loading remote URI:" + uri);
+        FileContent fileContent ;
+
         try {
-            log.debug("Loading remote URI:" + uri);
-            FileContent fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
-           // 2016-03-22 only pure http/https auto detect encoding
-            if ( "http".equalsIgnoreCase( uri.substring(0,4) ) ) {
+            // set cookie if cookies set
+            if (0 < this.cookies.size()) {
+                FileSystemOptions fsOptions = new FileSystemOptions();
+                HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri));
+                fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
+            } else
+                fileContent = fileSystem.resolveFile(uri).getContent();
+
+            // 2016-03-22 only pure http/https auto detect encoding
+            if ("http".equalsIgnoreCase(uri.substring(0, 4))) {
                 fileContent.getSize();  // pass a bug {@link https://issues.apache.org/jira/browse/VFS-427}
                 remoteEncoding = fileContent.getContentInfo().getContentEncoding();
             }
-            // 2016-03-21 修正zip file getContentEncoding 為null
-            if ( null == remoteEncoding) remoteEncoding = "utf-8";
 
-            if (! "utf".equalsIgnoreCase(remoteEncoding.substring(0,3)) ){
+
+            // 2016-03-21 修正zip file getContentEncoding 為null
+            if (null == remoteEncoding) remoteEncoding = "utf-8";
+
+            if (!"utf".equalsIgnoreCase(remoteEncoding.substring(0, 3))) {
                 log.debug("remote content encoding: " + remoteEncoding);
 
                 // force charset encoding if setRemoteEncoding set
-                if (! "utf".equalsIgnoreCase(encoding.substring(0, 3)) ){
+                if (!"utf".equalsIgnoreCase(encoding.substring(0, 3))) {
                     remoteEncoding = encoding;
-                }else{
+                } else {
                     // auto detecting encoding
-                    remoteEncoding = detectCharset(IOUtils.toByteArray( fileContent.getInputStream() ) );
+                    remoteEncoding = detectCharset(IOUtils.toByteArray(fileContent.getInputStream()));
                     log.info("real encoding: " + remoteEncoding);
                 }
             }
 
             // 透過  Apache VFS 取回指定的遠端資料
             // 2016-02-29 fixed
-            remoteContent = IOUtils.toString( fileContent.getInputStream(), remoteEncoding);
+            remoteContent = IOUtils.toString(fileContent.getInputStream(), remoteEncoding);
 
+        } catch(FileSystemException fse){
+            log.warn(fse.getMessage());
+            remoteContent =null;
         }catch(IOException ioe){
             // return empty
             log.warn(ioe.getMessage());
+            remoteContent =null;
         }catch(StringIndexOutOfBoundsException stre){
             log.warn("uri: " + uri );
             log.warn(stre.getMessage());
+            remoteContent =null;
         }
 
         clearCookies();
 
+        // any exception will return "null"
         return remoteContent;
     }
 
