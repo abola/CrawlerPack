@@ -13,7 +13,7 @@ Java 網路資料爬蟲包 GitHub: [https://github.com/abola/CrawlerPack](https:
 爬蟲包的產生，主要是以[Jsoup](http://jsoup.org/)為核心，整合各式套件，修補中文處理
 問題。並提供***SOP開發模式***，減少開發時間，且更容易上手。
 
-同時爬蟲包也是一個開源專案，採MIT授權*(可商用、再修改)*。
+同時爬蟲包也是一個開源專案，採Apache2.0授權*(可商用、再修改)*。
 並已上傳至[公開伺服器](https://maven-badges.herokuapp.com/maven-central/com.github.abola/crawler)
 提供下載，你可以很簡易的將爬蟲包加入專案中
 
