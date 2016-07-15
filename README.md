@@ -11,13 +11,13 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3-1</version>
 </dependency>
 ```
 To add a dependency using Gradle:
 ```gradle
 dependencies {
-    compile 'com.github.abola:crawler:1.0.3'
+    compile 'com.github.abola:crawler:1.0.3-1'
 }
 ```
 
@@ -166,6 +166,9 @@ System.out.println( timer.stop().toString() );
 
 
 ## Change log
+#### 1.0.3-1
+* 更新 Apache Commons-VFS 套件版本至 2.1 
+ 
 #### 1.0.3
 * 修正(跳過) 壓縮格式無法取得字元長度的臭蟲
 
