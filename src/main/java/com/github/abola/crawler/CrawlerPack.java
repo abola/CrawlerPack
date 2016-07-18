@@ -26,7 +26,6 @@ import org.json.XML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
-import org.jsoup.parser.PrefixXmlTreeBuilder;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -313,6 +312,8 @@ public class CrawlerPack {
     /**
      * 將 XML 轉化為 Jsoup Document 物件
      *
+     * Jsoup 1.9.1+ supported non-ascii tag
+     * -----
      * 如果碰到Tag 名稱首字元非 a-zA-Z 的字元，jsoup 會解析為註解
      * 所以必需用騙的先置入 prefix
      * 再改寫xmlParse 在回傳時移除prefix
@@ -323,11 +324,13 @@ public class CrawlerPack {
     public org.jsoup.nodes.Document xmlToJsoupDoc(String xml){
 
         // Tag 首字元非 a-zA-Z 時轉化為註解的問題
-        xml = xml.replaceAll("<([^A-Za-z\\/! ][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
-                 .replaceAll("<\\/([^A-Za-z\\/ ][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
+        //xml = xml.replaceAll("<([^A-Za-z\\/! ][^\\/>]*)>", "<"+prefix.toLowerCase()+"$1>")
+        //         .replaceAll("<\\/([^A-Za-z\\/ ][^\\/>]*)>", "</"+prefix.toLowerCase()+"$1>");
 
         // 將 xml 轉為 jsoup Document 物件
-        Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new PrefixXmlTreeBuilder(prefix.toLowerCase()) ) );
+        //Document jsoupDoc = Jsoup.parse(xml, "", new Parser( new PrefixXmlTreeBuilder(prefix.toLowerCase()) ) );
+
+        Document jsoupDoc = Jsoup.parse(xml, "", Parser.xmlParser() );
         jsoupDoc.charset(StandardCharsets.UTF_8);
 
         return jsoupDoc;

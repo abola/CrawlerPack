@@ -6,6 +6,7 @@ package org.jsoup.parser;
  * <p>Usage example: {@code Document xmlDoc = Jsoup.parse(html, baseUrl, new Parser( new PrefixXmlTreeBuilder("prefixName")  );}</p>
  *
  * @author Abola Lee<abola921@gmail.com>
+ * @deprecated
  ****
  * Use the {@code XmlTreeBuilder} when you want to parse XML without any of the HTML DOM rules being applied to the
  * document.
