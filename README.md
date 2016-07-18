@@ -11,13 +11,13 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3-1</version>
 </dependency>
 ```
 To add a dependency using Gradle:
 ```gradle
 dependencies {
-    compile 'com.github.abola:crawler:1.0.3'
+    compile 'com.github.abola:crawler:1.0.3-1'
 }
 ```
 
@@ -116,7 +116,7 @@ CrawlerPack.start()
     .select("span:containsOwn(標題) + span:eq(1)").text();
 ```
 
-#### Compressed data example
+#### Compressed data example (gzip/gz)
 ```java
 // 北市Youbike資訊
 String uri = "gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz";
@@ -125,6 +125,26 @@ String uri = "gz:https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz
 CrawlerPack.start()
     .getFromJson(uri)
     .select("retVal > *:contains(大安區)")
+```
+
+#### Compressed data example (zip)
+```java
+// 內政部實價登錄
+String uri = "zip:http://plvr.land.moi.gov.tw"
+             + "/Download?type=zip&fileName=lvr_landxml.zip"
+             + "!/A_LVR_LAND_A.XML";  // 解壓縮後取出的檔案路徑+名稱
+
+// org.jsoup.select.Elements
+Elements elems = CrawlerPack.start()
+                    .getFromXml(uri)
+                    .select("買賣");
+
+for(Element elem: elems){
+    System.out.println(
+        elem.select("鄉鎮市區").text() +
+        "," + elem.select("總價元").text()
+    );
+}
 ```
 
 ## Tips
@@ -166,6 +186,9 @@ System.out.println( timer.stop().toString() );
 
 
 ## Change log
+#### 1.0.3-1
+* 更新 Apache Commons-VFS 套件版本至 2.1 
+ 
 #### 1.0.3
 * 修正(跳過) 壓縮格式無法取得字元長度的臭蟲
 
