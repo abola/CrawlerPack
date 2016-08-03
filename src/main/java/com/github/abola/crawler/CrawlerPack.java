@@ -73,6 +73,8 @@ public class CrawlerPack {
         return defaultCrawler;
     }
 
+    private String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36";
+
     private List<Cookie> cookies = new ArrayList<>();
 
 
@@ -235,13 +237,17 @@ public class CrawlerPack {
         FileContent fileContent ;
 
         try {
+
+            FileSystemOptions fsOptions = new FileSystemOptions();
+            // set userAgent
+            HttpFileSystemConfigBuilder.getInstance().setUserAgent(fsOptions, userAgent);
+
             // set cookie if cookies set
             if (0 < this.cookies.size()) {
-                FileSystemOptions fsOptions = new FileSystemOptions();
                 HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri));
-                fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
-            } else
-                fileContent = fileSystem.resolveFile(uri).getContent();
+            }
+
+            fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
 
             // 2016-03-22 only pure http/https auto detect encoding
             if ("http".equalsIgnoreCase(uri.substring(0, 4))) {
