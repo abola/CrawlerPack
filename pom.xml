@@ -67,13 +67,6 @@
             <version>1.9.2</version>
         </dependency>
 
-        <!-- slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.13</version>
-        </dependency>
-
         <!-- detect string encoding -->
         <dependency>
             <groupId>com.googlecode.juniversalchardet</groupId>

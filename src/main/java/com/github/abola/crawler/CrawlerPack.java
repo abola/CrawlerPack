@@ -17,7 +17,11 @@ package com.github.abola.crawler;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.vfs2.*;
+import org.apache.commons.logging.impl.SimpleLog;
+import org.apache.commons.vfs2.CacheStrategy;
+import org.apache.commons.vfs2.FileContent;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.http.HttpFileSystemConfigBuilder;
 import org.json.JSONArray;
@@ -27,12 +31,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.mozilla.universalchardet.UniversalDetector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 資料爬蟲包 
@@ -42,7 +46,7 @@ import java.util.*;
  */
 public class CrawlerPack {
 
-    static Logger log = LoggerFactory.getLogger(CrawlerPack.class);
+    static SimpleLog log = new SimpleLog("simple.logger.com.github.abola.crawler.CrawlerPack");
 
     static StandardFileSystemManager fileSystem ;
 
@@ -51,9 +55,17 @@ public class CrawlerPack {
         // for pass SSL
         XTrustProvider.install();
 
+        // Set default logging level "ERROR"
+        log.setLevel(SimpleLog.LOG_LEVEL_ERROR);
+
         try {
+
             fileSystem = new StandardFileSystemManager();
+
             fileSystem.setCacheStrategy(CacheStrategy.ON_CALL);
+
+            // change default logger to SimpleLog
+            fileSystem.setLogger(log);
             fileSystem.init();
         }catch(FileSystemException fse){
             // ignore
@@ -112,7 +124,7 @@ public class CrawlerPack {
      *
      */
     public CrawlerPack addCookie(String domain, String name, String value,
-                  String path, Date expires, boolean secure) {
+                                 String path, Date expires, boolean secure) {
         if( null == name ) {
             log.warn("Cookie name null.");
             return this;
@@ -380,6 +392,19 @@ public class CrawlerPack {
         String detectEncoding = detector.getDetectedCharset();
 
         return null==detectEncoding?detectCharset(content,offset+detectBuffer):detectEncoding;
+    }
+
+    /**
+     * Setting global level logging
+     *
+     * example:
+     *   CrawlerPack.setLoggerLevel( SimpleLog.LOG_LEVEL_INFO );
+     *
+     * @param level
+     */
+    public static void setLoggerLevel(int level){
+        log.setLevel(level);
+        fileSystem.setLogger(log);
     }
 
 }
