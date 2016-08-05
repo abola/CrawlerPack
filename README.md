@@ -105,6 +105,16 @@ CrawlerPack.start()
     .select("div.title > a").text();
 ```
 
+#### set userAgent example (CrawlerPack >= 1.1)
+```java
+System.out.println(
+  CrawlerPack.start()
+    .setUserAgent("")
+    .getFromHtml(uri)
+    .select("*")
+);    
+```
+
 #### Cookie example
 ```java
 // ptt 八掛版創立首篇廢文標題
@@ -148,6 +158,8 @@ for(Element elem: elems){
 ```
 
 ## Tips
+
+#### 指定文件編碼 
 爬蟲包的主要目標，是提供簡易入門的操作模式。然而爬蟲包的效能並不理想，主要原因是編碼偵測
 ，為了降低預設操作難度，使用了 [juniversalchardet](https://code.google.com/archive/p/juniversalchardet/)
 自動偵測遠端內容編碼。直接指定遠端編碼可跳過自動偵測，提升一點效能。如果遠端為UTF8編碼
@@ -179,13 +191,49 @@ System.out.println( timer.stop().toString() );
 // avg 480ms 
 ```
 
-----
+#### 設定 User Agent
+部份網站會使用 User-Agent 來阻擋GoogleBot或爬蟲。爬蟲包( >= 1.1)預設會偽裝為一般瀏覽器。
+ 
 
-### 已知問題
-簡址
+|套件              |預設User-Agent|
+|---               |:--|
+|Jsoup             |Java/1.8.0_20|
+|Apache Commons VFS|Jakarta-Commons-VFS|
+|CrawlerPack       |Mozilla/5.0 (CrawlerPack; )|
+
+## 除錯 (CrawlerPack >= 1.1)
+爬蟲包內預設除錯訊息等級為『Warn』，如果要調整除錯的等級，可依照下面範例調整
+```java
+// set to debug level
+CrawlerPack.setLoggerLevel(SimpleLog.LOG_LEVEL_DEBUG);
+ 
+// turn off logging
+CrawlerPack.setLoggerLevel(SimpleLog.LOG_LEVEL_OFF);
+```
+
+
+----
 
 
 ## Change log
+#### 1.1
+* 主要調動
+    - 更新: Jsoup 套件版本至 1.9.2
+    - 更新: JAVA-Json 套件版本至 20160212
+    - 更新: 移除 Slf4j 套件需求
+    - 調整: XML解析器改用原生 Jsoup XML parser (新版 Jsoup 已支援non-ASCII字元XML解析)
+
+
+* 新功能: static CrawlerPack.setLoggingLevel(int level) 可調整爬蟲包除錯訊息等級
+* 新功能: userAgent(String agent) 可調整userAgent的內容
+
+
+* 調整: 爬蟲包預設除錯訊息等級，調整至 Warn
+* 調整: 爬蟲包取得http/https，現在預設會加入userAgent資訊
+ 
+
+
+
 #### 1.0.3-1
 * 更新 Apache Commons-VFS 套件版本至 2.1 
  

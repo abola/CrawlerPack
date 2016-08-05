@@ -56,7 +56,7 @@ public class CrawlerPack {
         XTrustProvider.install();
 
         // Set default logging level "ERROR"
-        log.setLevel(SimpleLog.LOG_LEVEL_ERROR);
+        log.setLevel(SimpleLog.LOG_LEVEL_WARN);
 
         try {
 
@@ -85,7 +85,20 @@ public class CrawlerPack {
         return defaultCrawler;
     }
 
-    private String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36";
+    /**
+     * Setting global level logging
+     *
+     * example:
+     *   CrawlerPack.setLoggerLevel( SimpleLog.LOG_LEVEL_INFO );
+     *
+     * @param level
+     */
+    public static void setLoggerLevel(int level){
+        log.setLevel(level);
+        fileSystem.setLogger(log);
+    }
+
+    private String userAgent = "Mozilla/5.0 (CrawlerPack; )";
 
     private List<Cookie> cookies = new ArrayList<>();
 
@@ -394,17 +407,15 @@ public class CrawlerPack {
         return null==detectEncoding?detectCharset(content,offset+detectBuffer):detectEncoding;
     }
 
-    /**
-     * Setting global level logging
-     *
-     * example:
-     *   CrawlerPack.setLoggerLevel( SimpleLog.LOG_LEVEL_INFO );
-     *
-     * @param level
-     */
-    public static void setLoggerLevel(int level){
-        log.setLevel(level);
-        fileSystem.setLogger(log);
-    }
 
+    /**
+     * set header userAgent
+     *
+     * @param userAgent
+     * @return CrawlerPack
+     */
+    public CrawlerPack setUserAgent(String userAgent){
+        this.userAgent = userAgent;
+        return this;
+    }
 }
