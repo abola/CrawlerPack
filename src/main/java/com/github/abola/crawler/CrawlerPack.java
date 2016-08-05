@@ -112,7 +112,7 @@ public class CrawlerPack {
      */
     public CrawlerPack addCookie(String name, String value){
         if( null == name ) {
-            log.warn("Cookie name null.");
+            log.warn("addCookie: Cookie name null.");
             return this;
         }
 
@@ -139,7 +139,7 @@ public class CrawlerPack {
     public CrawlerPack addCookie(String domain, String name, String value,
                                  String path, Date expires, boolean secure) {
         if( null == name ) {
-            log.warn("Cookie name null.");
+            log.warn("addCookie: Cookie name null.");
             return this;
         }
 
@@ -161,7 +161,6 @@ public class CrawlerPack {
 
             if("".equals(cookie.getDomain())){
                 String domain = uri.replaceAll("^.*:\\/\\/([^\\/]+)[\\/]?.*$", "$1");
-//                System.out.println(domain);
                 cookie.setDomain(domain);
                 cookie.setPath("/");
                 cookie.setExpiryDate(null);
@@ -176,6 +175,7 @@ public class CrawlerPack {
      * Clear all cookies
      */
     void clearCookies(){
+        log.trace("clearCookies: clear all cookies.");
         cookies = new ArrayList<>();
     }
 
@@ -258,7 +258,7 @@ public class CrawlerPack {
         String remoteContent ;
         String remoteEncoding = "utf-8";
 
-        log.debug("Loading remote URI:" + uri);
+        log.debug("getFromRemote: Loading remote URI=" + uri);
         FileContent fileContent ;
 
         try {
@@ -272,6 +272,10 @@ public class CrawlerPack {
                 HttpFileSystemConfigBuilder.getInstance().setCookies(fsOptions, getCookies(uri));
             }
 
+            log.debug("getFromRemote: userAgent=" + userAgent);
+            log.debug("getFromRemote: cookieSize=" + cookies.size());
+            log.debug("getFromRemote: cookies=" + cookies.toString());
+
             fileContent = fileSystem.resolveFile(uri, fsOptions).getContent();
 
             // 2016-03-22 only pure http/https auto detect encoding
@@ -280,12 +284,13 @@ public class CrawlerPack {
                 remoteEncoding = fileContent.getContentInfo().getContentEncoding();
             }
 
+            log.debug("getFromRemote: remoteEncoding=" + remoteEncoding + "(auto detect) ");
 
             // 2016-03-21 修正zip file getContentEncoding 為null
             if (null == remoteEncoding) remoteEncoding = "utf-8";
 
             if (!"utf".equalsIgnoreCase(remoteEncoding.substring(0, 3))) {
-                log.debug("remote content encoding: " + remoteEncoding);
+                log.debug("getFromRemote: remote content encoding=" + remoteEncoding);
 
                 // force charset encoding if setRemoteEncoding set
                 if (!"utf".equalsIgnoreCase(encoding.substring(0, 3))) {
@@ -293,7 +298,7 @@ public class CrawlerPack {
                 } else {
                     // auto detecting encoding
                     remoteEncoding = detectCharset(IOUtils.toByteArray(fileContent.getInputStream()));
-                    log.info("real encoding: " + remoteEncoding);
+                    log.debug("getFromRemote: real encoding=" + remoteEncoding);
                 }
             }
 
@@ -302,20 +307,22 @@ public class CrawlerPack {
             remoteContent = IOUtils.toString(fileContent.getInputStream(), remoteEncoding);
 
         } catch(FileSystemException fse){
-            log.warn(fse.getMessage());
+            log.warn("getFromRemote: FileSystemException=" + fse.getMessage());
             remoteContent =null;
         }catch(IOException ioe){
             // return empty
-            log.warn(ioe.getMessage());
+            log.warn("getFromRemote: IOException=" + ioe.getMessage());
             remoteContent =null;
         }catch(StringIndexOutOfBoundsException stre){
-            log.warn("uri: " + uri );
+            log.warn("getFromRemote: StringIndexOutOfBoundsException=" + stre.getMessage());
+            log.warn("getFromRemote: uri=" + uri );
             log.warn(stre.getMessage());
             remoteContent =null;
         }
 
         clearCookies();
 
+        log.debug("getFromRemote: remoteContent=\n" + remoteContent);
         // any exception will return "null"
         return remoteContent;
     }
@@ -376,11 +383,13 @@ public class CrawlerPack {
      * @return CrawlerPack
      */
     public CrawlerPack setRemoteEncoding(String encoding){
+        log.debug("setRemoteEncoding: encoding=" + encoding);
         this.encoding = encoding;
         return this;
     }
 
     private String detectCharset(byte[] content){
+        log.debug("detectCharset: ");
         return detectCharset(content, 0);
     }
 
@@ -393,7 +402,7 @@ public class CrawlerPack {
      * @return real charset encoding
      */
     private String detectCharset(byte[] content, Integer offset){
-        log.debug("offset: " + offset);
+        log.debug("detectCharset: offset=" + offset);
 
         // detect failed
         if( offset > content.length ) return null;
@@ -415,6 +424,7 @@ public class CrawlerPack {
      * @return CrawlerPack
      */
     public CrawlerPack setUserAgent(String userAgent){
+        log.debug("setUserAgent: userAgent=\"" + userAgent + "\"");
         this.userAgent = userAgent;
         return this;
     }
