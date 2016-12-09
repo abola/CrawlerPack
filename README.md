@@ -11,13 +11,13 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.0.3-1</version>
+    <version>1.1</version>
 </dependency>
 ```
 To add a dependency using Gradle:
 ```gradle
 dependencies {
-    compile 'com.github.abola:crawler:1.0.3-1'
+    compile 'com.github.abola:crawler:1.1'
 }
 ```
 
