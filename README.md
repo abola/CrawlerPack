@@ -230,9 +230,7 @@ CrawlerPack.setLoggerLevel(SimpleLog.LOG_LEVEL_OFF);
 
 * 調整: 爬蟲包預設除錯訊息等級，調整至 Warn
 * 調整: 爬蟲包取得http/https，現在預設會加入userAgent資訊
- 
-
-
+* 調整: 支援 gzip 壓縮格式的文字串流
 
 #### 1.0.3-1
 * 更新 Apache Commons-VFS 套件版本至 2.1 
