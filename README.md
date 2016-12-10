@@ -11,7 +11,7 @@ To add a dependency on CrawlerPack using Maven, use the following:
 <dependency>
     <groupId>com.github.abola</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 To add a dependency using Gradle:
@@ -216,6 +216,9 @@ CrawlerPack.setLoggerLevel(SimpleLog.LOG_LEVEL_OFF);
 
 
 ## Change log
+#### 1.1.1
+* 修正 tar 檔無法正確打開的問題
+
 #### 1.1
 * 主要調動
     - 更新: Jsoup 套件版本至 1.9.2
